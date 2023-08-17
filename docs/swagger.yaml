@@ -1,0 +1,35 @@
+basePath: /api
+definitions:
+  models.JoinRequest:
+    properties:
+      github_username:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: belajarqywok@gmail.com
+    name: Qywok
+    url: https://belajarqywok.github.io/
+  description: Join Community REST API Service
+  license:
+    name: MIT
+    url: https://mit-license.org/
+  termsOfService: https://belajarqywok.github.io/
+  title: Join Community
+  version: "1.0"
+paths:
+  /join:
+    post:
+      description: Join Community Request
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JoinRequest'
+      summary: Join Community Request
+      tags:
+      - join
+swagger: "2.0"

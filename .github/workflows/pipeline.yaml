@@ -1,0 +1,78 @@
+name: 'CI / CD Pipeline'
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  testing:
+    name: 'Testing Project'
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Testing
+      run: go test -v ./tests -coverprofile=coverage.out
+
+    # - name: Check coverage
+    #   run: |
+    #     if [ $(go tool cover -func=coverage.out | tail -n 1 | awk '{print $3}') -lt 100 ]; then
+    #         echo "Coverage is less than 100%"
+    #         exit 1
+    #     fi
+
+  # build_and_deploy:
+  #   name: 'Build and Deploy on Vercel'
+  #   runs-on: ubuntu-latest
+  #   environment: production
+
+  #   needs: testing
+
+  #   defaults:
+  #     run:
+  #       shell: bash
+
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
+
+  #   - name: Setup Terraform
+  #     uses: hashicorp/setup-terraform@v1
+
+
+  #   - name: Get the commit SHA
+  #     run: echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+
+  #   - name: Get the release version
+  #     run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+
+  #   - name: Get the event name
+  #     run: echo "EVENT_NAME=${{ github.event_name }}" >> $GITHUB_ENV
+
+
+  #   - name: Terraform Init
+  #     run: |
+  #       terraform init
+
+  #   - name: Terraform Plan
+  #     run: |
+  #       terraform plan -no-color \
+  #         -var="api_token=${{ secrets.VERCEL_API_TOKEN }}" \
+  #         -var="github_ref=${COMMIT_SHA:0:7}"
+
+  #   - name: Terraform Apply and Add Environment Variable
+  #     if: |
+  #       ${{ env.VERSION }} == "refs/heads/main" && \
+  #         ${{ env.EVENT_NAME }} == "push"
+  
+  #     run: |
+  #       terraform apply -auto-approve -no-color \
+  #         -var="api_token=${{ secrets.VERCEL_API_TOKEN }}" \
+  #         -var="github_ref=${COMMIT_SHA:0:7}"

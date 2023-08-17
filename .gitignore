@@ -1,0 +1,10 @@
+/.vercel
+
+/terraform
+/.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+
+coverage.out
+.env
